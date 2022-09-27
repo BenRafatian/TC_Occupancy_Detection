@@ -32,7 +32,7 @@ totalNofPeople = 0
 
 
 frame = [0] * 768
-with open("ImageData2.json", "r") as read_file:
+with open(".\ImageData\ImageData2.json", "r") as read_file:
     print("Converting JSON encoded data into Numpy array")
     decodedArray = json.load(read_file)
 

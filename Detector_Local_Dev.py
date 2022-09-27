@@ -44,7 +44,7 @@ with open(".\imageData\ImageData2.json","r") as json_file:
 
         # max_value = np.max(data)
         max_value = 100
-        # min_value = np.min(data)
+        # min_value = np.min(data)        
         min_value = 50   
         # reshapedData = reshapedData - 
         # normalize image data between 0 - 255
