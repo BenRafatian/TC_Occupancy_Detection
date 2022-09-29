@@ -5,6 +5,8 @@ from turtle import width
 import cv2
 import matplotlib.pyplot as plt
 import numpy as np
+from tracker import *
+
 
 # a variable to keep the count of current people inside the room.
 CurrentPeopleInRoom = 0 
@@ -141,9 +143,9 @@ with open(".\imageData\ImageData2.json","r") as json_file:
 
 
         #preview Grey, Colored, and BG subtracted image
-        cv2.imshow("Grey Image", grey_image)
+        # cv2.imshow("Grey Image", grey_image)
         cv2.imshow("Colored Image", colored_img)
-        cv2.imshow("BG Subtracted", fgMask)
+        # cv2.imshow("BG Subtracted", fgMask)
         cv2.waitKey(0)
 
 
