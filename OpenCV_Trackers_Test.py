@@ -2,7 +2,7 @@
 import cv2
 
 tracker_types = ['BOOSTING', 'MIL','KCF', 'TLD', 'MEDIANFLOW', 'GOTURN', 'MOSSE', 'CSRT']
-tracker_type = tracker_types[5]
+tracker_type = tracker_types[0]
 
 if tracker_type == 'BOOSTING':
     tracker = cv2.legacy.TrackerBoosting_create()
@@ -23,7 +23,7 @@ if tracker_type == "CSRT":
 
 
 # Get the video file and read it
-video = cv2.VideoCapture("walking.mp4")
+video = cv2.VideoCapture("BG_sub_2.mp4")
 ret, frame = video.read()
 
 frame_height, frame_width = frame.shape[:2]
