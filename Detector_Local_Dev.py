@@ -31,7 +31,7 @@ backSub = cv2.createBackgroundSubtractorMOG2(history = 500, varThreshold = 16)
 
 # read the json image file and convert to NumPy array
 
-with open(".\imageData\ImageData2.json","r") as json_file:
+with open(".\imageData\ImageData500.json","r") as json_file:
     
     decodedArray = json.load(json_file)
     
