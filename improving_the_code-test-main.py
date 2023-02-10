@@ -32,7 +32,7 @@ totalNofPeople = 0
 
 
 frame = [0] * 768
-with open("ImageData2.json", "r") as read_file:
+with open(".\ImageData\ImageData2.json", "r") as read_file:
     print("Converting JSON encoded data into Numpy array")
     decodedArray = json.load(read_file)
 
@@ -62,7 +62,7 @@ with open("ImageData2.json", "r") as read_file:
             output_p = output_c
             # scaling
             minValue = 50 # math.floor(np.amin(output))
-            maxValue = 100
+            maxValue = 100     
             output = output - minValue
             output = output * 255 / (maxValue - minValue)  # Now scaled to 0 - 255
 
@@ -129,9 +129,9 @@ with open("ImageData2.json", "r") as read_file:
 
             if current_region[1] != per_region[1]:
                 if current_region[0] > per_region[0]:
-                    totalNofPeople = totalNofPeople + 1
+                    totalNofPeople = totalNofPeople - 1
                 if current_region[2] > per_region[2]:
-                    totalNofPeople = totalNofPeople -1
+                    totalNofPeople = totalNofPeople + 1
 
                 # send data to the azure IoT hub
 
