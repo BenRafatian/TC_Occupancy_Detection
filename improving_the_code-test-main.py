@@ -14,25 +14,30 @@ width = scalling * 32
 height = scalling * 24
 backSub = cv2.createBackgroundSubtractorMOG2(history=500,varThreshold = 16)
 
+
+
 # add device management to initialize the code
 img = np.zeros([height, width, 3])
 
 imgGray = np.zeros([height, width, 3])
-                
+divisionLine = 5 * img.shape[1]/10
+divisionLine2 = 7 * img.shape[1]/10                
 
 time.sleep(1)
 cx = 0
 r1 = 0
 r2 = 0
-r3 = 0
+
 frame = [0] * 768
-current_region = np.array([0, 0, 0])
-per_region = np.array([0, 0, 0])
+
+current_region = np.array([0, 0])
+prev_region = np.array([0, 0])
+
 totalNofPeople = 0
 
 
 frame = [0] * 768
-with open(".\ImageData\ImageData2.json", "r") as read_file:
+with open("ImageData/ImageData500.json", "r") as read_file:
     print("Converting JSON encoded data into Numpy array")
     decodedArray = json.load(read_file)
 
@@ -109,34 +114,34 @@ with open(".\ImageData\ImageData2.json", "r") as read_file:
                     # v2.rectangle(img, (x,y), (x+w, y+h), (0,255,0), 2)
                     cv2.rectangle(img, (x, y), (x + w, y + h), (255, 255, 0), 3)
                     cv2.drawContours(img, contours, inx, (0, 0, 255), 3)
-                    img = cv2.line(img, (int(2*img.shape[1]/3),0), (int(2*img.shape[1]/3),img.shape[0]), (255,255,255), 2)
-                    img = cv2.line(img, (int(img.shape[1]/3), 0), (int(img.shape[1]/3), img.shape[0]), (255, 255, 255), 2)
+                    # img = cv2.line(img, (int(divisionLine2),0), (int(divisionLine2),img.shape[0]), (255,255,255), 2)
+                    img = cv2.line(img, (int(divisionLine), 0), (int(divisionLine), img.shape[0]), (255, 255, 255), 2)
 
                     print("X:", cx, "Y:", cy)
                     print(img.shape)
                 # updating number of people in each region of interest
-                if 0 <= cx <= img.shape[1]/3:
-                    r1 = r1 + 1
-                if img.shape[1]/3 <= cx <= 2 * img.shape[1]/3:
-                    r2 = r2 + 1
-                if  2 * img.shape[1]/3 <= cx:
-                    r3 = r3 + 1
-                current_region = np.array([r1, r2, r3])
+                    if 0 <= cx <= divisionLine:
+                        r1 = r1 + 1
+                    
+                    if  divisionLine < cx:
+                        r2 = r2 + 1
+                    current_region = np.array([r1, r2])
                 r1 = 0
                 r2 = 0
-                r3 = 0
-                print("per_region: ", per_region, "current region: ", current_region)
+                print("prev_region: ", prev_region, "current region: ", current_region)
 
-            if current_region[1] != per_region[1]:
-                if current_region[0] > per_region[0]:
-                    totalNofPeople = totalNofPeople - 1
-                if current_region[2] > per_region[2]:
-                    totalNofPeople = totalNofPeople + 1
+           
+            if current_region[0] > prev_region[0]:
+                    
+                totalNofPeople = totalNofPeople + 1         
+            if current_region[1] > prev_region[1]:
+                    
+                totalNofPeople = totalNofPeople - 1
 
                 # send data to the azure IoT hub
 
             if current_region is not np.array([0, 0, 0]):
-                per_region = current_region
+                prev_region = current_region
                 print("all not-zero current to previous")
             print("current people in the room: ", totalNofPeople)
 
@@ -152,4 +157,4 @@ with open(".\ImageData\ImageData2.json", "r") as read_file:
             cv2.imshow("gray", new_imgGray)
             # cv2.imshow('FG Mask2', fgMask2)
             cv2.imshow("Bsubtraction",fgMask)
-            cv2.waitKey(0)
+            cv2.waitKey(75)

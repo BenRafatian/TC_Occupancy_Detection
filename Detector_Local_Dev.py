@@ -5,7 +5,6 @@ from turtle import width
 import cv2
 import matplotlib.pyplot as plt
 import numpy as np
-from manual_tracker import *
 
 
 # a variable to keep the count of current people inside the room.
