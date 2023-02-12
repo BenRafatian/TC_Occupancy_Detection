@@ -2,7 +2,7 @@
 import cv2
 
 tracker_types = ['BOOSTING', 'MIL','KCF', 'TLD', 'MEDIANFLOW', 'GOTURN', 'MOSSE', 'CSRT']
-tracker_type = tracker_types[0]
+tracker_type = tracker_types[3]
 
 if tracker_type == 'BOOSTING':
     tracker = cv2.legacy.TrackerBoosting_create()
@@ -23,7 +23,7 @@ if tracker_type == "CSRT":
 
 
 # Get the video file and read it
-video = cv2.VideoCapture("BG_sub_2.mp4")
+video = cv2.VideoCapture("BG_sub.avi")
 ret, frame = video.read()
 
 frame_height, frame_width = frame.shape[:2]
@@ -61,8 +61,7 @@ while True:
                 cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50),2)
     cv2.imshow("Tracking", frame)
     output.write(frame)
-    k = cv2.waitKey(1) & 0xff
-    if k == 27 : break
+    cv2.waitKey(75)
         
 video.release()
 output.release()

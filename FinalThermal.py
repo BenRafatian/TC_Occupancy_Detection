@@ -1,6 +1,6 @@
 from __future__ import print_function
 import numpy as np
-import serial, cv2, math
+import cv2, math
 import time
 import board
 import busio
