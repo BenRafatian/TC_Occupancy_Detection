@@ -59,7 +59,7 @@ while True:
             
             output_p = data.reshape(24, 32)
             index += 1
-            logging.debug('1- frame captured.')
+            logging.debug('1- A new frame captured.')
         else :
             try:
                 mlx.getFrame(frame)
