@@ -18,7 +18,7 @@ backSub = cv2.createBackgroundSubtractorMOG2(history=500,varThreshold = 16)
 img = np.zeros([height, width, 3])
 imgGray = np.zeros([height, width, 3])
 divisionLine = 5 * img.shape[1]/10
-divisionLine2 = 7 * img.shape[1]/10                
+               
 
 time.sleep(1)
 cx = 0
@@ -26,15 +26,13 @@ r1 = 0
 r2 = 0
 
 frame = [0] * 768
-
 current_region = np.array([0, 0])
 prev_region = np.array([0, 0])
-
 totalNofPeople = 0
 
 
-frame = [0] * 768
-with open("ImageData/ImageData500.json", "r") as read_file:
+
+with open("ImageData/ImageData1.json", "r") as read_file:
     print("Converting JSON encoded data into Numpy array")
     decodedArray = json.load(read_file)
 
@@ -132,7 +130,7 @@ with open("ImageData/ImageData500.json", "r") as read_file:
 
                 # Send data to the azure IoT hub
 
-            if current_region is not np.array([0, 0, 0]):
+            if current_region is not np.array([0, 0]):
                 prev_region = current_region
                 print("all not-zero current to previous")
             print("current people in the room: ", totalNofPeople)
