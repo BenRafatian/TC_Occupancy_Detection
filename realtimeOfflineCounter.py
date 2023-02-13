@@ -5,11 +5,12 @@ import time
 import board
 import busio
 import adafruit_mlx90640
-#import iotHub
-#import asyncio
+import logging
+# Configuring logger to check the performance of the device
+logging.basicConfig(filename="log.txt", level=logging.DEBUG,
+                    format="%(asctime)s %(message)s")
 
-#azureIoTHub= iotHub
-
+logging.debug("logging started...")
 scalling = 20
 width = scalling * 32
 height = scalling * 24
@@ -37,6 +38,8 @@ mlx = adafruit_mlx90640.MLX90640(i2c) # begin MLX90640 with I2C comm
 mlx.refresh_rate = adafruit_mlx90640.RefreshRate.REFRESH_8_HZ # 16Hz is noisy
 time.sleep(1)
 
+logging.debug("### mlx setup is ready. ###")
+
 index=0
 
 while True:
@@ -56,6 +59,7 @@ while True:
             
             output_p = data.reshape(24, 32)
             index += 1
+            logging.debug('1- frame captured.')
         else :
             try:
                 mlx.getFrame(frame)
@@ -71,6 +75,7 @@ while True:
             output_c = data.reshape(24, 32)
             output = (output_c + output_p) / 2
             output_p = output_c
+            logging.debug('1- A new frame captured.')
             # scaling
             minValue = 50 # math.floor(np.amin(output))
             maxValue = 100
@@ -97,7 +102,7 @@ while True:
 
 
             fgMask = fgMask + cv2.Canny(fgMask, 50, 70, L2gradient=True)
-
+            logging.debug('2- Image foreground extracted.')
             ###############   finding contours ################
             contours, _ = cv2.findContours(fgMask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
             for inx, cnt in enumerate(contours):
@@ -118,8 +123,6 @@ while True:
                     # img = cv2.line(img, (int(divisionLine2),0), (int(divisionLine2),img.shape[0]), (255,255,255), 2)
                     img = cv2.line(img, (int(divisionLine), 0), (int(divisionLine), img.shape[0]), (255, 255, 255), 2)
 
-                    print("X:", cx, "Y:", cy)
-                    print(img.shape)
                     # Updating number of people in each region of interest
                     if 0 <= cx <= divisionLine:
                         r1 = r1 + 1
@@ -127,6 +130,7 @@ while True:
                     if  divisionLine < cx:
                         r2 = r2 + 1
                     current_region = np.array([r1, r2])
+                    logging.debug('3- Contour detected.')
                 r1 = 0
                 r2 = 0
                 print("prev_region: ", prev_region, "current region: ", current_region)
@@ -134,11 +138,12 @@ while True:
            
             if current_region[0] > prev_region[0]:
                     
-                totalNofPeople = totalNofPeople + 1         
+                totalNofPeople = totalNofPeople + 1  
+                logging.debug("4- Total number updated.")       
             if current_region[1] > prev_region[1]:
                     
                 totalNofPeople = totalNofPeople - 1
-
+                logging.debug("4- Total number updated.")
                 # Send data to the azure IoT hub
 
             if current_region is not np.array([0, 0]):
